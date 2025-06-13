@@ -28,6 +28,83 @@ require_once '../includes/conexao.php';
             height: 40px;
             margin-right: 10px;
         }
+        
+        /* Forçar o menu hambúrguer a aparecer em todas as telas */
+        .navbar-toggler {
+            display: block !important;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-toggler:hover {
+            border-color: rgba(255,255,255,0.6);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.25);
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Esconder o menu normal e forçar sempre colapsado */
+        .navbar-nav {
+            display: none;
+        }
+        
+        /* Mostrar apenas quando o collapse estiver ativo */
+        .navbar-collapse.show .navbar-nav {
+            display: flex !important;
+            flex-direction: column;
+            background: #0856d6;
+            border-radius: 8px;
+            padding: 15px 0;
+            margin-top: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .navbar-collapse.show .navbar-nav .nav-item {
+            margin: 0;
+        }
+        
+        .navbar-collapse.show .navbar-nav .nav-link {
+            padding: 12px 25px;
+            color: rgba(255,255,255,0.9) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-collapse.show .navbar-nav .nav-item:last-child .nav-link {
+            border-bottom: none;
+        }
+        
+        .navbar-collapse.show .navbar-nav .nav-link:hover {
+            background-color: rgba(255,255,255,0.15);
+            color: #fff !important;
+            padding-left: 35px;
+        }
+        
+        .navbar-collapse.show .navbar-nav .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            color: #fff !important;
+            font-weight: 600;
+        }
+        
+        /* Ícones nos links */
+        .nav-link i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
         .card {
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             border: none;
@@ -58,21 +135,42 @@ require_once '../includes/conexao.php';
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../assets/imagens/logo.png" alt="Logo">
+                <img src="../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle" style="height: 40px; margin-right: 10px;">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../usuarios/tela_login.php">Entrar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../usuarios/tela_cadastro.php">Cadastrar</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-house-door-fill"></i>Início
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-info-circle-fill"></i>Sobre
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../usuarios/tela_login.php">
+                            <i class="bi bi-box-arrow-in-right"></i>Entrar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../usuarios/tela_cadastro.php">
+                            <i class="bi bi-person-plus-fill"></i>Cadastrar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../usuarios/alterar_senha.php">
+                            <i class="bi bi-key-fill"></i>Alterar Senha
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -141,7 +239,7 @@ require_once '../includes/conexao.php';
                     <hr>
                 <?php endif; ?>
 
-                <!-- Lista de comentários (tem que  trocar pelo nosso foreach do banco depois) -->
+                <!-- Lista de comentários (exemplo estático, troque pelo seu foreach do banco depois) -->
                 <div class="mb-2">
                     <strong>Maria:</strong> Muito boa a notícia! <br>
                     <small class="text-muted">11/06/2025 14:30</small>
@@ -168,8 +266,6 @@ require_once '../includes/conexao.php';
             </div>
         </div>
     </footer>
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

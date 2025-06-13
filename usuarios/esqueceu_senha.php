@@ -1,12 +1,24 @@
 <?php
+require_once '../includes/conexao.php';
+require_once '../includes/funcoes.php';
+$mensagem = '';
 
-// Aqui você pode incluir o processamento do cadastro, se desejar
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+    $codigo = gerarCodigoVerificacao($pdo, $email);
+    if ($codigo) {
+        $mensagem = "Seu código de verificação é: <b>$codigo</b>. Anote o código e <a href='redefinir_senha.php'>clique aqui</a> para redefinir sua senha.";
+        // Aqui você pode implementar o envio do código por e-mail, se desejar.
+    } else {
+        $mensagem = 'E-mail não encontrado.';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro - Fato ou Fruta</title>
+    <title>Recuperar Senha - Fato ou Fruta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -50,7 +62,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../img/logo/logo_fatooufruto.png" alt="Logo">
+                <img src="../assets/imagens/logo.png" alt="Logo">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
         </div>
@@ -58,31 +70,17 @@
 
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="card p-4" style="max-width: 400px; width: 100%;">
-            <h3 class="text-center text-primary mb-3">Criar Conta</h3>
-            <form action="processa_cadastro.php" method="POST">
+            <h3 class="text-center text-primary mb-3">Recuperar Senha</h3>
+            <form method="POST">
                 <div class="mb-3">
-                    <label for="nome" class="form-label">Nome completo</label>
-                    <input type="text" class="form-control" id="nome" name="nome" required>
+                    <label for="email" class="form-label">E-mail cadastrado:</label>
+                    <input type="email" class="form-control" name="email" required>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">E-mail</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="senha" class="form-label">Senha</label>
-                    <input type="password" class="form-control" id="senha" name="senha" required>
-                </div>
-                <div class="mb-3">
-                    <label for="tipo" class="form-label">Tipo de usuário</label>
-                    <select class="form-select" id="tipo" name="tipo" required>
-                        <option value="leitor" selected>Leitor</option>
-                        <option value="autor">Autor</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
+                <button type="submit" class="btn btn-primary w-100">Enviar código</button>
             </form>
+            <div class="mt-3"><?= $mensagem ?></div>
             <div class="text-center mt-3">
-                Já tem uma conta? <a href="../login.php" class="text-primary">Entrar</a>
+                Lembrou a senha? <a href="tela_login.php" class="text-primary">Entrar</a>
             </div>
         </div>
     </div>

@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../assets/imagens/logo.png" alt="Logo">
+                <img src="../img/logo/logo_fatooufruto.png" alt="Logo">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
         </div>

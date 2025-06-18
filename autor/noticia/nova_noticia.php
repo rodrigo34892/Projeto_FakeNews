@@ -1,5 +1,5 @@
 <?php
-// filepath: c:\xampp\htdocs\ProjetoFakeNews\noticias\nova_noticia.php
+// filepath: c:\xampp\htdocs\Projeto_FakeNews\autor\noticia\nova_noticia.php
 
 session_start();
 require_once '../../includes/conexao.php';
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../assets/imagens/logo.png" alt="Logo" class="rounded-circle" style="height: 40px; margin-right: 10px;">
+                <img src="../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle" style="height: 40px; margin-right: 10px;">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
         </div>

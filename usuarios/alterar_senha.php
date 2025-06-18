@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../assets/imagens/logo.png" alt="Logo" class="rounded-circle" style="height: 40px; margin-right: 10px;">
+                <img src="../img/logo/logo.png" alt="Logo" class="rounded-circle" style="height: 40px; margin-right: 10px;">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
         </div>

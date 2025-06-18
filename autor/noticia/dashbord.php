@@ -1,10 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../usuarios/tela_login.php");
+    header("Location: ../../usuarios/tela_login.php");
     exit;
 }
-require_once '../includes/conexao.php';
+require_once '../../includes/conexao.php';
 
 // Buscar dados do usuário logado
 $stmt = $pdo->prepare("SELECT nome, email, tipo FROM usuarios WHERE id = ?");
@@ -36,13 +36,9 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../assets/imagens/logo.png" alt="Logo" class="rounded-circle" style="height: 40px; margin-right: 10px;">
+                <img src="../../assets/imagens/logo.png" alt="Logo" class="rounded-circle" style="height: 40px; margin-right: 10px;">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
-            <div class="ms-auto">
-                <a href="../usuarios/alterar_senha.php" class="btn btn-outline-light btn-sm me-2"><i class="bi bi-key"></i> Alterar Senha</a>
-                <a href="../usuarios/logout.php" class="btn btn-danger btn-sm"><i class="bi bi-box-arrow-right"></i> Sair</a>
-            </div>
         </div>
     </nav>
 
@@ -60,14 +56,14 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             <div class="col-md-4 mb-4">
                 <div class="card p-3">
                     <h5 class="card-title"><i class="bi bi-newspaper"></i> Minhas Notícias</h5>
-                    <a href="../noticias/minhas_noticias.php" class="btn btn-primary btn-sm w-100 mb-2">Ver minhas notícias</a>
-                    <a href="../noticias/cadastrar_noticia.php" class="btn btn-success btn-sm w-100">Cadastrar nova notícia</a>
+                    <a href="../../noticias/minhas_noticias.php" class="btn btn-primary btn-sm w-100 mb-2">Ver minhas notícias</a>
+                    <a href="../../noticias/cadastrar_noticia.php" class="btn btn-primary btn-sm w-100" style="background-color: #0d6efd; border-color: #0d6efd;">Cadastrar nova notícia</a>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="card p-3">
                     <h5 class="card-title"><i class="bi bi-chat-dots"></i> Comentários</h5>
-                    <a href="../comentarios/meus_comentarios.php" class="btn btn-primary btn-sm w-100">Ver meus comentários</a>
+                    <a href="../../comentarios/meus_comentarios.php" class="btn btn-primary btn-sm w-100">Ver meus comentários</a>
                 </div>
             </div>
         </div>

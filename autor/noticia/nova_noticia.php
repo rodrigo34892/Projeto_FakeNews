@@ -2,7 +2,7 @@
 // filepath: c:\xampp\htdocs\ProjetoFakeNews\noticias\nova_noticia.php
 
 session_start();
-require_once '../includes/conexao.php';
+require_once '../../includes/conexao.php';
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
@@ -81,6 +81,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="minhas_noticias.php" class="btn btn-link mt-3">Voltar</a>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+      <!-- Footer -->
+    <footer class="footer mt-5">
+        <div class="container text-center">
+            <div class="mb-3 social-icons">
+                <a href="https://instagram.com" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="https://facebook.com" target="_blank" title="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="https://youtube.com" target="_blank" title="YouTube"><i class="bi bi-youtube"></i></a>
+                <a href="mailto:contato@fatooufruta.com" title="E-mail"><i class="bi bi-envelope"></i></a>
+            </div>
+            <div>
+                &copy; <?php echo date('Y'); ?> Fato ou Fruta. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

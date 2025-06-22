@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Login - Fato ou Fruta</title>
@@ -34,20 +35,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        body { background: #f4f8fb; }
-        .navbar { background: #0d6efd; }
-        .navbar-brand img { height: 40px; margin-right: 10px; }
-        .card { box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: none; }
-        .footer { background: #0d6efd; color: #fff; padding: 30px 0 10px 0; }
-        .footer .social-icons a { color: #fff; font-size: 1.5rem; margin: 0 10px; transition: color 0.2s; }
-        .footer .social-icons a:hover { color: #ffc107; }
+        body {
+            background: #f4f8fb;
+        }
+
+        .navbar {
+            background: #0d6efd;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .card {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: none;
+        }
+
+        .footer {
+            background: #0d6efd;
+            color: #fff;
+            padding: 30px 0 10px 0;
+        }
+
+        .footer .social-icons a {
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+
+        .footer .social-icons a:hover {
+            color: #ffc107;
+        }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle" style="height: 40px; margin-right: 10px;">
+                <img src="../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle"
+                    style="height: 40px; margin-right: 10px;">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
         </div>
@@ -68,7 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn btn-primary w-100">Entrar</button>
             </form>
             <div class="text-center mt-3">
-                Não tem conta? <a href="tela_cadastro.php" class="text-primary">Cadastre-se</a>
+                Não tem conta? <a href="tela_cadastro.php" class="text-primary">Cadastre-se</a><br>
+                Esqueceu a senha? <a href="esqueceu_senha.php" class="text-primary">Recuperar senha</a>
             </div>
         </div>
     </div>
@@ -87,4 +118,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $codigo = gerarCodigoVerificacao($pdo, $email);
     if ($codigo) {
-        $mensagem = "Seu código de verificação é: <b>$codigo</b>. Anote o código e <a href='redefinir_senha.php'>clique aqui</a> para redefinir sua senha.";
+        $mensagem = "Seu código de verificação é: <b>$codigo</b>. Anote o código e <a href='nova_senha.php'>clique aqui</a> para redefinir sua senha.";
         // Aqui você pode implementar o envio do código por e-mail, se desejar.
     } else {
         $mensagem = 'E-mail não encontrado.';
@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Recuperar Senha - Fato ou Fruta</title>
@@ -30,39 +31,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         body {
             background: #f4f8fb;
         }
+
         .navbar {
             background: #0d6efd;
         }
+
         .navbar-brand img {
             height: 40px;
             margin-right: 10px;
         }
+
         .card {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             border: none;
         }
+
         .footer {
             background: #0d6efd;
             color: #fff;
             padding: 30px 0 10px 0;
         }
+
         .footer .social-icons a {
             color: #fff;
             font-size: 1.5rem;
             margin: 0 10px;
             transition: color 0.2s;
         }
+
         .footer .social-icons a:hover {
             color: #ffc107;
         }
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle" style="height: 40px; margin-right: 10px;">
+                <img src="../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle"
+                    style="height: 40px; margin-right: 10px;">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
         </div>
@@ -101,4 +110,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

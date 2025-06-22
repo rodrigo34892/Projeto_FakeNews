@@ -10,9 +10,15 @@ require_once '../../includes/conexao.php';
 $stmt = $pdo->prepare("SELECT nome, email, tipo FROM usuarios WHERE id = ?");
 $stmt->execute([$_SESSION['usuario_id']]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Buscar total de postagens do usuário
+$stmtTotal = $pdo->prepare("SELECT COUNT(*) AS total FROM noticias WHERE autor = ?");
+$stmtTotal->execute([$_SESSION['usuario_id']]);
+$totalPostagens = $stmtTotal->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Dashboard - Fato ou Fruta</title>
@@ -21,22 +27,67 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Ícones Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { background: #f4f8fb; }
-        .navbar { background: #0d6efd; }
-        .navbar-brand img { height: 40px; margin-right: 10px; }
-        .card { box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: none; }
-        .footer { background: #0d6efd; color: #fff; padding: 30px 0 10px 0; }
-        .footer .social-icons a { color: #fff; font-size: 1.5rem; margin: 0 10px; transition: color 0.2s; }
-        .footer .social-icons a:hover { color: #ffc107; }
+        body {
+            background: #f4f8fb;
+        }
+
+        .navbar {
+            background: #0d6efd;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .card {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: none;
+        }
+
+        .footer {
+            background: #0d6efd;
+            color: #fff;
+            padding: 30px 0 10px 0;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 1030;
+        }
+
+        .footer .social-icons a {
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+
+        .footer .social-icons a:hover {
+            color: #ffc107;
+        }
+
+        /* No mobile, footer não fica fixo */
+        @media (max-width: 767.98px) {
+            .footer {
+                position: static;
+                padding-bottom: 10px;
+            }
+        }
+    </style>
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle" style="height: 40px; margin-right: 10px;">
+                <img src="../../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle"
+                    style="height: 40px; margin-right: 10px;">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
         </div>
@@ -56,14 +107,15 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             <div class="col-md-4 mb-4">
                 <div class="card p-3">
                     <h5 class="card-title"><i class="bi bi-newspaper"></i> Minhas Notícias</h5>
-                    <a href="../../noticias/minhas_noticias.php" class="btn btn-primary btn-sm w-100 mb-2">Ver minhas notícias</a>
-                    <a href="../../noticias/cadastrar_noticia.php" class="btn btn-primary btn-sm w-100" style="background-color: #0d6efd; border-color: #0d6efd;">Cadastrar nova notícia</a>
+                    <a href="visualizar_noticia.php" class="btn btn-primary btn-sm w-100 mb-2">Ver minhas notícias</a>
+                    <a href="nova_noticia.php" class="btn btn-primary btn-sm w-100"
+                        style="background-color: #0d6efd; border-color: #0d6efd;">Cadastrar nova notícia</a>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="card p-3">
-                    <h5 class="card-title"><i class="bi bi-chat-dots"></i> Comentários</h5>
-                    <a href="../../comentarios/meus_comentarios.php" class="btn btn-primary btn-sm w-100">Ver meus comentários</a>
+                    <h5 class="card-title text-center"><i class="bi bi-bar-chart-line"></i> Total de Postagens</h5>
+                    <canvas id="graficoTotalPostagens"></canvas>
                 </div>
             </div>
         </div>
@@ -84,5 +136,34 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Gráfico de pizza com o total de postagens
+        const canvas = document.getElementById('graficoTotalPostagens');
+        canvas.style.backgroundColor = 'transparent'; // Garante fundo transparente no canvas
+
+        const ctx = canvas.getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Postagens'],
+                datasets: [{
+                    data: [<?= $totalPostagens ?>],
+                    backgroundColor: ['#0d6efd'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true }
+                },
+                layout: {
+                    padding: 0
+                }
+            }
+        });
+    </script>
 </body>
+
 </html>

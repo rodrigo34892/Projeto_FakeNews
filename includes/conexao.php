@@ -2,7 +2,7 @@
 // filepath: c:\xampp\htdocs\ProjetoFakeNews\includes\conexao.php
 
 $host = 'localhost';
-$db   = 'fato_ou_fruta';
+$db = 'fato_ou_fruta';
 $user = 'root';
 $pass = '';
 $charset = 'utf8mb4';

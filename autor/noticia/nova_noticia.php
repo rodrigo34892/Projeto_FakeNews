@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Cadastrar Notícia</button>
             </form>
-            <a href="minhas_noticias.php" class="btn btn-link mt-3">Voltar</a>
+           <a href="../../pagina/index.php" class="btn btn-link mt-3">Voltar</a>
         </div>
     </div>
     <footer class="footer mt-5">

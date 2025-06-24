@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Salvar Alterações</button>
             </form>
-            <a href="../sistema/dashboard.php" class="btn btn-link mt-3">Voltar ao painel</a>
+            <a href="../pagina/index.php" class="btn btn-link mt-3">Voltar ao painel</a>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

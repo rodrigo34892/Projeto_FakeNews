@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn btn-primary w-100">Alterar Senha</button>
             </form>
             <div class="text-center mt-3">
-                <a href="../sistema/dashboard.php" class="text-primary">Voltar ao painel</a>
+                <a href="../pagina/index.php" class="text-primary">Voltar ao painel</a>
             </div>
         </div>
     </div>

@@ -1,3 +1,4 @@
+
 # 📰 Fato ou Fruta
 
 **Portal de notícias sobre fake news desenvolvido em aula, com sistema de cadastro, login, comentários e gerenciamento de notícias.**
@@ -55,6 +56,7 @@ ProjetoFakeNews/
 │   └── visualizar.php # Visualizar notícias
 ├── conta/             # Alteração de perfil do usuário
 │   └── alterar_perfil.php # Alterar nome e e-mail
+├── Dumps/             # Contém o código SQL do banco de dados
 ├── includes/          # Funções auxiliares e conexão com o banco de dados
 │   ├── conexao.php    # Conexão com o banco de dados
 │   └── funcoes.php    # Funções auxiliares
@@ -68,3 +70,17 @@ ProjetoFakeNews/
 │   ├── alterar_senha.php   # Alteração de senha
 │   └── logout.php     # Logout do usuário
 ├── README.md
+```
+
+---
+
+## 💡 Observação
+
+**Este projeto foi desenvolvido durante a disciplina de Programação Web Site 2, com o objetivo de promover a conscientização sobre fake news. O desenvolvimento contou com o auxílio de inteligência artificial para sugestões de código, organização e resolução de dúvidas técnicas.**
+
+---
+
+## 👥 Autores
+
+- **Rodrigo Nunes**: Atuou como desenvolvedor full stack, sendo o principal responsável pela implementação do sistema. Desenvolveu as principais funcionalidades, estruturou o projeto, realizou correções de bugs e cuidou da organização geral.  
+- **Rafael Gomes**: Colaborou ativamente com sugestões de melhoria, apoio na organização das ideias, testes de funcionalidades e implementação de partes do código, contribuindo para a construção do sistema em conjunto.

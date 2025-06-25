@@ -2,14 +2,14 @@
 session_start();
 require_once '../includes/conexao.php';
 
-// Lógica para inserir comentário (deve ser antes do HTML!)
+// lógica para inserir comentário 
 if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && isset($_SESSION['usuario_id'])) {
     $comentario = trim($_POST['comentario']);
     $noticia_id = intval($_POST['noticia_id']);
     if ($comentario !== '') {
         $stmtInsere = $pdo->prepare("INSERT INTO comentarios (noticia_id, usuario_id, comentario) VALUES (?, ?, ?)");
         $stmtInsere->execute([$noticia_id, $_SESSION['usuario_id'], $comentario]);
-        // Redireciona para evitar repost em refresh
+        // redireciona para evitar repost em refresh
         header("Location: " . $_SERVER['REQUEST_URI']);
         exit;
     }
@@ -57,7 +57,7 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
         }
 
         .card-img-top {
-            max-height: 300px;
+            max-height: 330px;
             object-fit: cover;
             width: 100%;
         }
@@ -162,7 +162,7 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
     <div class="container mt-5">
         <h1 class="mb-4 text-primary">Últimas Notícias</h1>
         <?php
-        // Busca e exibe as notícias cadastradas
+        // busca e exibe as notícias cadastradas
         $stmt = $pdo->query("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS autor_nome
                          FROM noticias n
                          JOIN usuarios u ON n.autor = u.id
@@ -184,7 +184,7 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
                         <hr>
                         <h6 class="mb-2"><i class="bi bi-chat-dots"></i> Comentários</h6>
                         <?php
-                        // Busca comentários da notícia
+                        // busca comentários da notícia
                         $stmtComentarios = $pdo->prepare("SELECT c.comentario, c.data, u.nome FROM comentarios c JOIN usuarios u ON c.usuario_id = u.id WHERE c.noticia_id = ? ORDER BY c.data DESC");
                         $stmtComentarios->execute([$noticia['id']]);
                         if ($stmtComentarios->rowCount() > 0):

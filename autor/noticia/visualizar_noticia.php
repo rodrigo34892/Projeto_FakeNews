@@ -2,13 +2,13 @@
 session_start();
 require_once '../../includes/conexao.php';
 
-// Verifica se o usuário está logado
+// verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../../usuarios/tela_login.php");
     exit;
 }
 
-// Busca todas as notícias cadastradas
+// busca todas as notícias cadastradas
 $stmt = $pdo->query("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS autor_nome
                      FROM noticias n
                      JOIN usuarios u ON n.autor = u.id

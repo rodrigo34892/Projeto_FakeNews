@@ -17,8 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt = $pdo->prepare("SELECT senha FROM usuarios WHERE id = ?");
     $stmt->execute([$id]);
+    /* busca o resultado da consulta e armazena os dados do 
+     usuário em um array associativo.*/
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    /* password_verify() função segura para comparar uma 
+    // senha em texto plano com um hash*/
     if ($usuario && password_verify($senha_atual, $usuario['senha'])) {
         if ($nova_senha === $confirma_senha) {
             $nova_senha_hash = password_hash($nova_senha, PASSWORD_BCRYPT);

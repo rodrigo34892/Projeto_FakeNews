@@ -2,29 +2,29 @@
 session_start();
 require_once '../../includes/conexao.php';
 
-// Verifica se o usuário está logado e é autor
+// faz a verificação se o usuário está logado e é autor
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'autor') {
     header("Location: ../../usuarios/tela_login.php");
     exit;
 }
 
-// Se recebeu o id para excluir
+// se recebeu o id para excluir
 if (isset($_GET['excluir'])) {
     $id = intval($_GET['excluir']);
-    // Verifica se a notícia pertence ao usuário logado
+    // verifica se a notícia pertence ao usuário logado
     $stmt = $pdo->prepare("SELECT * FROM noticias WHERE id = ? AND autor = ?");
     $stmt->execute([$id, $_SESSION['usuario_id']]);
     $noticia = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($noticia) {
-        // Exclui a imagem associada, se houver
+        // Exclui a imagem, se houver
         if (!empty($noticia['imagem'])) {
             $caminhoImagem = '../../assets/imagens/noticias/' . $noticia['imagem'];
             if (file_exists($caminhoImagem)) {
                 unlink($caminhoImagem);
             }
         }
-        // Exclui a notícia
+        // exclui a notícia
         $stmt = $pdo->prepare("DELETE FROM noticias WHERE id = ? AND autor = ?");
         $stmt->execute([$id, $_SESSION['usuario_id']]);
         $msg = "Notícia excluída com sucesso!";
@@ -33,7 +33,7 @@ if (isset($_GET['excluir'])) {
     }
 }
 
-// Busca todas as notícias do autor logado
+// busca todas as notícias do autor logado
 $stmt = $pdo->prepare("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS autor_nome
                        FROM noticias n
                        JOIN usuarios u ON n.autor = u.id

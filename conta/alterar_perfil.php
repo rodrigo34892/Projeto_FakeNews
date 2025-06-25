@@ -1,10 +1,9 @@
 <?php
-// filepath: c:\xampp\htdocs\ProjetoFakeNews\usuarios\alterar_perfil.php
 
 session_start();
 require_once '../includes/conexao.php';
 
-// Verifica se o usuário está logado
+// verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: tela_login.php");
     exit;
@@ -13,7 +12,7 @@ if (!isset($_SESSION['usuario_id'])) {
 $id = $_SESSION['usuario_id'];
 $mensagem = "";
 
-// Busca os dados atuais do usuário
+// faz a busca dos dados atuais do usuário
 $stmt = $pdo->prepare("SELECT nome, email FROM usuarios WHERE id = ?");
 $stmt->execute([$id]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -23,12 +22,12 @@ if (!$usuario) {
     exit;
 }
 
-// Atualiza os dados se o formulário for enviado
+// atualiza os dados se o formulário for enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
 
-    // Verifica se o e-mail já está em uso por outro usuário
+    // verifica se o email já está sendo usado por outro usuário
     $stmtEmail = $pdo->prepare("SELECT id FROM usuarios WHERE email = ? AND id != ?");
     $stmtEmail->execute([$email, $id]);
     if ($stmtEmail->fetch()) {

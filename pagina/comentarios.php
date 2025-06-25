@@ -10,17 +10,17 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $usuario_id = $_SESSION['usuario_id'];
 
-// Excluir comentário se solicitado
+// exclui comentário se solicitado
 if (isset($_POST['excluir_comentario'], $_POST['comentario_id'])) {
     $comentario_id = intval($_POST['comentario_id']);
-    // Só exclui se o comentário for do usuário logado
+    // só exclui se o comentário for do usuário logado
     $stmtDel = $pdo->prepare("DELETE FROM comentarios WHERE id = ? AND usuario_id = ?");
     $stmtDel->execute([$comentario_id, $usuario_id]);
     header("Location: comentarios.php");
     exit;
 }
 
-// Busca todos os comentários do usuário, junto com o título da notícia e o id do comentário
+// faz a busca de todos os comentários do usuário, junto com o título da notícia e o id do comentário
 $stmt = $pdo->prepare("
     SELECT c.id, c.comentario, c.data, n.titulo, n.id AS noticia_id
     FROM comentarios c
@@ -108,7 +108,6 @@ $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     style="height: 40px; margin-right: 10px;">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
-            <!-- Menu removido conforme solicitado -->
         </div>
     </nav>
 

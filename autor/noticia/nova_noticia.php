@@ -2,7 +2,7 @@
 session_start();
 require_once '../../includes/conexao.php';
 
-// Verifica se o usuário está logado
+// verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../../usuarios/tela_login.php");
     exit;

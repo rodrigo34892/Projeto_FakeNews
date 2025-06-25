@@ -11,7 +11,7 @@ $stmt = $pdo->prepare("SELECT nome, email, tipo FROM usuarios WHERE id = ?");
 $stmt->execute([$_SESSION['usuario_id']]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Buscar total de postagens do usuário
+// Busca o total de postagens do usuário
 $stmtTotal = $pdo->prepare("SELECT COUNT(*) AS total FROM noticias WHERE autor = ?");
 $stmtTotal->execute([$_SESSION['usuario_id']]);
 $totalPostagens = $stmtTotal->fetchColumn();

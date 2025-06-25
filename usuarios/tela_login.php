@@ -4,6 +4,10 @@ session_start();
 
 $mensagem = '';
 
+
+/* Verifica se a requisição HTTP foi 
+ feita usando o método POST (se o formulário foi enviado)*/
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
@@ -11,6 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = ?");
     $stmt->execute([$email]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    /* Faz a verificação se um usuário foi encontrado e se a senha fornecida corresponde
+    à senha armazenada no banco de dados.*/
+
+    // password_verify() para verificar senhas com hash de forma segura.
 
     if ($usuario && password_verify($senha, $usuario['senha'])) {
         $_SESSION['usuario_id'] = $usuario['id'];

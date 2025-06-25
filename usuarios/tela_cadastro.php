@@ -10,6 +10,8 @@ $mensagem = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
+    /* Gera um hash seguro da senha usando PASSWORD_BCRYPT
+     antes de armazenar no banco de dados.*/
     $senha = password_hash($_POST['senha'], PASSWORD_BCRYPT);
     $tipo = $_POST['tipo'];
 

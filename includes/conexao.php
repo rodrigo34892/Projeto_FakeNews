@@ -1,5 +1,4 @@
 <?php
-// filepath: c:\xampp\htdocs\ProjetoFakeNews\includes\conexao.php
 
 $host = 'localhost';
 $db = 'fato_ou_fruta';

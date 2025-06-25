@@ -3,12 +3,12 @@ require_once '../includes/conexao.php';
 require_once '../includes/funcoes.php';
 $mensagem = '';
 
+// Gera e salva um código de segurança único para o e-mail no banco de dados
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $codigo = gerarCodigoVerificacao($pdo, $email);
     if ($codigo) {
         $mensagem = "Seu código de verificação é: <b>$codigo</b>. Anote o código e <a href='nova_senha.php'>clique aqui</a> para redefinir sua senha.";
-        // Aqui você pode implementar o envio do código por e-mail, se desejar.
     } else {
         $mensagem = 'E-mail não encontrado.';
     }

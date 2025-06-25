@@ -56,6 +56,7 @@ ProjetoFakeNews/
 │   └── visualizar.php # Visualizar notícias
 ├── conta/             # Alteração de perfil do usuário
 │   └── alterar_perfil.php # Alterar nome e e-mail
+├── Dumps/             # Contém o código SQL do banco de dados
 ├── includes/          # Funções auxiliares e conexão com o banco de dados
 │   ├── conexao.php    # Conexão com o banco de dados
 │   └── funcoes.php    # Funções auxiliares

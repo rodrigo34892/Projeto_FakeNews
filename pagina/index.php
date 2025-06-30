@@ -225,6 +225,20 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
         ?>
     </div>
 
+    <!-- Widget de clima -->
+    <div class="container my-4">
+        <h4 class="mb-3"><i class="bi bi-cloud-sun"></i> Verificar Clima</h4>
+        <form id="formClima" class="row g-2">
+            <div class="col-auto">
+                <input type="text" id="cidade" class="form-control" placeholder="Digite sua cidade" required>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Ver clima</button>
+            </div>
+        </form>
+        <div id="resultadoClima" class="mt-3"></div>
+    </div>
+
     <footer class="footer mt-5">
         <div class="container text-center">
             <div class="mb-3 social-icons">
@@ -239,6 +253,37 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!--  Clima (OpenWeather Widget) -->
+    <script>
+        document.getElementById('formClima').addEventListener('submit', function (e) {
+            e.preventDefault(); // impede o envio padrão do formulário 
+
+            // verifica o valor digitado pelo usuário no campo de cidade
+            const cidade = document.getElementById('cidade').value.trim();
+            const resultado = document.getElementById('resultadoClima');
+            resultado.innerHTML = "Buscando...";
+            // faz uma requisição para a API do OpenWeather
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cidade)}&appid=ebba3fce4cdd0e053bd525570da4bd74&units=metric&lang=pt_br`)
+                .then(res => res.json()) // converte a resposta para JSON para acessar os dados como objeto
+                .then(data => {
+                    if (data.cod === 200) {
+                        // monta o card com as informações do clima
+                        resultado.innerHTML = `
+        <div class="card p-3 mx-auto" style="max-width:350px;">
+            <h5>${data.name}, ${data.sys.country}</h5>
+            <p class="mb-1"><strong>Temperatura:</strong> ${data.main.temp}°C</p>
+            <p class="mb-1"><strong>Situação:</strong> ${data.weather[0].description}</p>
+        </div>
+                    `;
+                    } else {
+                        resultado.innerHTML = "<div class='alert alert-danger'>Cidade não encontrada.</div>";
+                    }
+                })
+                .catch(() => {
+                    resultado.innerHTML = "<div class='alert alert-danger'>Erro ao buscar clima.</div>";
+                });
+        });
+    </script>
 </body>
 
 </html>

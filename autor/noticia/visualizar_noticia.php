@@ -59,6 +59,30 @@ $stmt = $pdo->query("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS auto
             object-fit: cover;
             width: 100%;
         }
+
+        /* Dark mode */
+        .dark-mode {
+            background: #181a1b !important;
+            color: #f1f1f1 !important;
+        }
+        .dark-mode .card {
+            background: #23272b !important;
+            color: #f1f1f1 !important;
+        }
+        .dark-mode .navbar,
+        .dark-mode .footer {
+            background: #111 !important;
+        }
+        .dark-mode .form-control,
+        .dark-mode .btn {
+            background: #23272b !important;
+            color: #f1f1f1 !important;
+            border-color: #444 !important;
+        }
+        .dark-mode .navbar-brand,
+        .dark-mode .navbar-brand span {
+            color: #f1f1f1 !important;
+        }
     </style>
 </head>
 
@@ -107,4 +131,18 @@ $stmt = $pdo->query("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS auto
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dark mode automático e persistente
+        function aplicarTemaInicial() {
+            const temaSalvo = localStorage.getItem('tema');
+            if (temaSalvo) {
+                document.body.classList.toggle('dark-mode', temaSalvo === 'dark');
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
+    </script>
 </body>
+
+</html>

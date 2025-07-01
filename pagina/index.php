@@ -9,7 +9,6 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
     if ($comentario !== '') {
         $stmtInsere = $pdo->prepare("INSERT INTO comentarios (noticia_id, usuario_id, comentario) VALUES (?, ?, ?)");
         $stmtInsere->execute([$noticia_id, $_SESSION['usuario_id'], $comentario]);
-        // redireciona para evitar repost em refresh
         header("Location: " . $_SERVER['REQUEST_URI']);
         exit;
     }
@@ -28,55 +27,71 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
         body {
             background: #f4f8fb;
         }
-
         .navbar {
             background: #0d6efd;
         }
-
         .navbar-brand img {
             height: 40px;
             margin-right: 10px;
         }
-
         .footer {
             background: #0d6efd;
             color: #fff;
             padding: 30px 0 10px 0;
             margin-top: auto;
         }
-
         .footer .social-icons a {
             color: #fff;
             font-size: 1.5rem;
             margin: 0 10px;
             transition: color 0.2s;
         }
-
         .footer .social-icons a:hover {
             color: #ffc107;
         }
-
         .card-img-top {
             max-height: 330px;
             object-fit: cover;
             width: 100%;
         }
-
         .comentario-box {
             background: #f8f9fa;
             border-radius: 8px;
             padding: 10px 15px;
             margin-bottom: 8px;
         }
-
         .comentario-nome {
             font-weight: bold;
             color: #0d6efd;
         }
-
         .comentario-data {
             font-size: 0.85em;
             color: #888;
+        }
+        /* Estilos para dark mode */
+        .dark-mode {
+            background: #181a1b !important;
+            color: #f1f1f1 !important;
+        }
+        .dark-mode .card,
+        .dark-mode .comentario-box {
+            background: #23272b !important;
+            color: #f1f1f1 !important;
+        }
+        .dark-mode .navbar,
+        .dark-mode .footer {
+            background: #111 !important;
+        }
+        .dark-mode .form-control,
+        .dark-mode .btn {
+            background: #23272b !important;
+            color: #f1f1f1 !important;
+            border-color: #444 !important;
+        }
+        .dark-mode .navbar-brand,
+        .dark-mode .navbar-brand span,
+        .dark-mode .navbar-nav .nav-link {
+            color: #f1f1f1 !important;
         }
     </style>
 </head>
@@ -153,6 +168,12 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
                             </a>
                         </li>
                     <?php endif; ?>
+                    <!-- Botão modo escuro como link do menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="toggleDark">
+                            <i class="bi bi-moon"></i> Modo Escuro
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -162,7 +183,6 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
     <div class="container mt-5">
         <h1 class="mb-4 text-primary">Últimas Notícias</h1>
         <?php
-        // busca e exibe as notícias cadastradas
         $stmt = $pdo->query("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS autor_nome
                          FROM noticias n
                          JOIN usuarios u ON n.autor = u.id
@@ -184,7 +204,6 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
                         <hr>
                         <h6 class="mb-2"><i class="bi bi-chat-dots"></i> Comentários</h6>
                         <?php
-                        // busca comentários da notícia
                         $stmtComentarios = $pdo->prepare("SELECT c.comentario, c.data, u.nome FROM comentarios c JOIN usuarios u ON c.usuario_id = u.id WHERE c.noticia_id = ? ORDER BY c.data DESC");
                         $stmtComentarios->execute([$noticia['id']]);
                         if ($stmtComentarios->rowCount() > 0):
@@ -253,28 +272,23 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!--  Clima (OpenWeather Widget) -->
     <script>
         document.getElementById('formClima').addEventListener('submit', function (e) {
-            e.preventDefault(); // impede o envio padrão do formulário 
-
-            // verifica o valor digitado pelo usuário no campo de cidade
+            e.preventDefault();
             const cidade = document.getElementById('cidade').value.trim();
             const resultado = document.getElementById('resultadoClima');
             resultado.innerHTML = "Buscando...";
-            // faz uma requisição para a API do OpenWeather
             fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cidade)}&appid=ebba3fce4cdd0e053bd525570da4bd74&units=metric&lang=pt_br`)
-                .then(res => res.json()) // converte a resposta para JSON para acessar os dados como objeto
+                .then(res => res.json())
                 .then(data => {
                     if (data.cod === 200) {
-                        // monta o card com as informações do clima
                         resultado.innerHTML = `
         <div class="card p-3 mx-auto" style="max-width:350px;">
             <h5>${data.name}, ${data.sys.country}</h5>
             <p class="mb-1"><strong>Temperatura:</strong> ${data.main.temp}°C</p>
             <p class="mb-1"><strong>Situação:</strong> ${data.weather[0].description}</p>
         </div>
-                    `;
+                        `;
                     } else {
                         resultado.innerHTML = "<div class='alert alert-danger'>Cidade não encontrada.</div>";
                     }
@@ -283,7 +297,47 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
                     resultado.innerHTML = "<div class='alert alert-danger'>Erro ao buscar clima.</div>";
                 });
         });
+
+        // Dark mode automático e manual
+        function aplicarTemaInicial() {
+            const temaSalvo = localStorage.getItem('tema');
+            if (temaSalvo) {
+                document.body.classList.toggle('dark-mode', temaSalvo === 'dark');
+                atualizarBotao(temaSalvo === 'dark');
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+                atualizarBotao(true);
+            }
+        }
+        function atualizarBotao(escuro) {
+            const btn = document.getElementById('toggleDark');
+            if (btn) {
+                if (escuro) {
+                    btn.innerHTML = '<i class="bi bi-brightness-high"></i> Modo Claro';
+                } else {
+                    btn.innerHTML = '<i class="bi bi-moon"></i> Modo Escuro';
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            aplicarTemaInicial();
+            const btn = document.getElementById('toggleDark');
+            if (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const escuro = !document.body.classList.contains('dark-mode');
+                    document.body.classList.toggle('dark-mode', escuro);
+                    localStorage.setItem('tema', escuro ? 'dark' : 'light');
+                    atualizarBotao(escuro);
+                });
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (!localStorage.getItem('tema')) {
+                    document.body.classList.toggle('dark-mode', e.matches);
+                    atualizarBotao(e.matches);
+                }
+            });
+        });
     </script>
 </body>
-
 </html>

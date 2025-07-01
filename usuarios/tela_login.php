@@ -4,10 +4,6 @@ session_start();
 
 $mensagem = '';
 
-
-/* Verifica se a requisição HTTP foi 
- feita usando o método POST (se o formulário foi enviado)*/
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
@@ -16,16 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$email]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    /* Faz a verificação se um usuário foi encontrado e se a senha fornecida corresponde
-    à senha armazenada no banco de dados.*/
-
-    // password_verify() para verificar senhas com hash de forma segura.
-
     if ($usuario && password_verify($senha, $usuario['senha'])) {
         $_SESSION['usuario_id'] = $usuario['id'];
         $_SESSION['usuario_nome'] = $usuario['nome'];
         $_SESSION['usuario_tipo'] = $usuario['tipo'];
-        // Redireciona para a página inicial após login
         header("Location: ../pagina/index.php");
         exit;
     } else {
@@ -78,6 +68,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .footer .social-icons a:hover {
             color: #ffc107;
         }
+
+        /* Dark mode */
+        .dark-mode {
+            background: #181a1b !important;
+            color: #f1f1f1 !important;
+        }
+        .dark-mode .card {
+            background: #23272b !important;
+            color: #f1f1f1 !important;
+        }
+        .dark-mode .navbar,
+        .dark-mode .footer {
+            background: #111 !important;
+        }
+        .dark-mode .form-control,
+        .dark-mode .btn {
+            background: #23272b !important;
+            color: #f1f1f1 !important;
+            border-color: #444 !important;
+        }
+        .dark-mode .navbar-brand,
+        .dark-mode .navbar-brand span {
+            color: #f1f1f1 !important;
+        }
     </style>
 </head>
 
@@ -126,6 +140,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dark mode automático e persistente
+        function aplicarTemaInicial() {
+            const temaSalvo = localStorage.getItem('tema');
+            if (temaSalvo) {
+                document.body.classList.toggle('dark-mode', temaSalvo === 'dark');
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
+    </script>
 </body>
-
-</html>

@@ -86,6 +86,30 @@ $stmt->execute([$_SESSION['usuario_id']]);
             object-fit: cover;
             width: 100%;
         }
+
+        /* Dark mode */
+        .dark-mode {
+            background: #181a1b !important;
+            color: #f1f1f1 !important;
+        }
+        .dark-mode .card {
+            background: #23272b !important;
+            color: #f1f1f1 !important;
+        }
+        .dark-mode .navbar,
+        .dark-mode .footer {
+            background: #111 !important;
+        }
+        .dark-mode .form-control,
+        .dark-mode .btn {
+            background: #23272b !important;
+            color: #f1f1f1 !important;
+            border-color: #444 !important;
+        }
+        .dark-mode .navbar-brand,
+        .dark-mode .navbar-brand span {
+            color: #f1f1f1 !important;
+        }
     </style>
 </head>
 
@@ -130,13 +154,10 @@ $stmt->execute([$_SESSION['usuario_id']]);
     <footer class="footer mt-5">
         <div class="container text-center">
             <div class="mb-3 social-icons">
-                <a href="https://instagram.com" target="_blank" title="Instagram"><i
-                        class="bi bi-instagram text-primary"></i></a>
-                <a href="https://facebook.com" target="_blank" title="Facebook"><i
-                        class="bi bi-facebook text-primary"></i></a>
-                <a href="https://youtube.com" target="_blank" title="YouTube"><i
-                        class="bi bi-youtube text-primary"></i></a>
-                <a href="mailto:contato@fatooufruta.com" title="E-mail"><i class="bi bi-envelope text-primary"></i></a>
+                <a href="https://instagram.com" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="https://facebook.com" target="_blank" title="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="https://youtube.com" target="_blank" title="YouTube"><i class="bi bi-youtube"></i></a>
+                <a href="mailto:contato@fatooufruta.com" title="E-mail"><i class="bi bi-envelope"></i></a>
             </div>
             <div>
                 &copy; <?php echo date('Y'); ?> Fato ou Fruta. Todos os direitos reservados.
@@ -144,6 +165,18 @@ $stmt->execute([$_SESSION['usuario_id']]);
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dark mode automático e persistente
+        function aplicarTemaInicial() {
+            const temaSalvo = localStorage.getItem('tema');
+            if (temaSalvo) {
+                document.body.classList.toggle('dark-mode', temaSalvo === 'dark');
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
+    </script>
 </body>
 
 </html>

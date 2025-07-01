@@ -27,67 +27,81 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
         body {
             background: #f4f8fb;
         }
+
         .navbar {
             background: #0d6efd;
         }
+
         .navbar-brand img {
             height: 40px;
             margin-right: 10px;
         }
+
         .footer {
             background: #0d6efd;
             color: #fff;
             padding: 30px 0 10px 0;
             margin-top: auto;
         }
+
         .footer .social-icons a {
             color: #fff;
             font-size: 1.5rem;
             margin: 0 10px;
             transition: color 0.2s;
         }
+
         .footer .social-icons a:hover {
             color: #ffc107;
         }
+
         .card-img-top {
             max-height: 330px;
             object-fit: cover;
             width: 100%;
         }
+
         .comentario-box {
             background: #f8f9fa;
             border-radius: 8px;
             padding: 10px 15px;
             margin-bottom: 8px;
         }
+
         .comentario-nome {
             font-weight: bold;
             color: #0d6efd;
         }
+
         .comentario-data {
             font-size: 0.85em;
             color: #888;
         }
+
         /* Estilos para dark mode */
         .dark-mode {
             background: #181a1b !important;
             color: #f1f1f1 !important;
         }
+
         .dark-mode .card,
         .dark-mode .comentario-box {
             background: #23272b !important;
             color: #f1f1f1 !important;
         }
+
         .dark-mode .navbar,
         .dark-mode .footer {
             background: #111 !important;
         }
+
         .dark-mode .form-control,
         .dark-mode .btn {
             background: #23272b !important;
             color: #f1f1f1 !important;
             border-color: #444 !important;
         }
+
         .dark-mode .navbar-brand,
         .dark-mode .navbar-brand span,
         .dark-mode .navbar-nav .nav-link {
@@ -339,5 +353,32 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
             });
         });
     </script>
+    <!-- Banner de Cookies -->
+    <div id="cookieConsent"
+        style="display:none; position:fixed; bottom:0; left:0; width:100%; background:#111; color:#fff; z-index:9999; padding:18px 0; box-shadow:0 -2px 8px rgba(0,0,0,0.08);">
+        <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between">
+            <div class="mb-2 mb-md-0">
+                <i class="bi bi-shield-check" style="font-size:1.5rem; color:#0d6efd; margin-right:8px;"></i>
+                Este site utiliza cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa
+                <a href="#" style="color:#0d6efd; text-decoration:underline;">Política de Privacidade</a>.
+            </div>
+            <button id="btnAceitarCookies" class="btn btn-primary btn-sm ms-md-3">
+                <i class="bi bi-check-circle"></i> Aceitar
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!localStorage.getItem('cookiesAceitos')) {
+                document.getElementById('cookieConsent').style.display = 'block';
+            }
+            document.getElementById('btnAceitarCookies').onclick = function () {
+                localStorage.setItem('cookiesAceitos', 'sim');
+                document.getElementById('cookieConsent').style.display = 'none';
+            };
+        });
+    </script>
 </body>
+
 </html>

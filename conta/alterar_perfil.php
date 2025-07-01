@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Alterar Perfil - Fato ou Fruta</title>
@@ -53,54 +54,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body { background: #f4f8fb; }
-        .navbar { background: #0d6efd; }
-        .navbar-brand img { height: 40px; margin-right: 10px; }
-        .card { box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: none; }
+        body {
+            background: #f4f8fb;
+        }
+
+        .navbar {
+            background: #0d6efd;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .card {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: none;
+        }
+
         .footer {
             background: #0d6efd;
             color: #fff;
             padding: 30px 0 10px 0;
         }
+
         .footer .social-icons a {
             color: #fff;
             font-size: 1.5rem;
             margin: 0 10px;
             transition: color 0.2s;
         }
+
         .footer .social-icons a:hover {
             color: #ffc107;
         }
+
         /* Dark mode */
         .dark-mode {
             background: #181a1b !important;
             color: #f1f1f1 !important;
         }
+
         .dark-mode .card {
             background: #23272b !important;
             color: #f1f1f1 !important;
         }
+
         .dark-mode .navbar,
         .dark-mode .footer {
             background: #111 !important;
         }
+
         .dark-mode .form-control,
         .dark-mode .btn {
             background: #23272b !important;
             color: #f1f1f1 !important;
             border-color: #444 !important;
         }
+
         .dark-mode .navbar-brand,
         .dark-mode .navbar-brand span {
             color: #f1f1f1 !important;
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle" style="height: 40px; margin-right: 10px;">
+                <img src="../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle"
+                    style="height: 40px; margin-right: 10px;">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
         </div>
@@ -112,11 +136,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST">
                 <div class="mb-3">
                     <label for="nome" class="form-label">Nome</label>
-                    <input type="text" class="form-control" id="nome" name="nome" value="<?= htmlspecialchars($usuario['nome']) ?>" required>
+                    <input type="text" class="form-control" id="nome" name="nome"
+                        value="<?= htmlspecialchars($usuario['nome']) ?>" required>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">E-mail</label>
-                    <input type="email" class="form-control" id="email" name="email" value="<?= htmlspecialchars($usuario['email']) ?>" required>
+                    <input type="email" class="form-control" id="email" name="email"
+                        value="<?= htmlspecialchars($usuario['email']) ?>" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Salvar Alterações</button>
             </form>
@@ -150,4 +176,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
     </script>
 </body>
+
 </html>

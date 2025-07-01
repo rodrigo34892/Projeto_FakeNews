@@ -65,20 +65,24 @@ $stmt = $pdo->query("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS auto
             background: #181a1b !important;
             color: #f1f1f1 !important;
         }
+
         .dark-mode .card {
             background: #23272b !important;
             color: #f1f1f1 !important;
         }
+
         .dark-mode .navbar,
         .dark-mode .footer {
             background: #111 !important;
         }
+
         .dark-mode .form-control,
         .dark-mode .btn {
             background: #23272b !important;
             color: #f1f1f1 !important;
             border-color: #444 !important;
         }
+
         .dark-mode .navbar-brand,
         .dark-mode .navbar-brand span {
             color: #f1f1f1 !important;

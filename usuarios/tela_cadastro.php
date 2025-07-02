@@ -10,20 +10,31 @@ $mensagem = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
-    $senha = password_hash($_POST['senha'], PASSWORD_BCRYPT);
+    $senha = $_POST['senha'];
     $tipo = $_POST['tipo'];
 
-    // Verifica se o e-mail já existe
-    $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = ?");
-    $stmt->execute([$email]);
-    if ($stmt->fetch()) {
-        $mensagem = "<div class='alert alert-danger'>E-mail já cadastrado.</div>";
+    // Validação da senha
+    if (
+        strlen($senha) < 8 ||
+        !preg_match('/[A-Z]/', $senha) ||
+        !preg_match('/[\W_]/', $senha)
+    ) {
+        $mensagem = "<div class='alert alert-danger'>A senha deve ter pelo menos 8 caracteres, uma letra maiúscula e um caractere especial.</div>";
     } else {
-        $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)");
-        if ($stmt->execute([$nome, $email, $senha, $tipo])) {
-            $mensagem = "<div class='alert alert-success'>Cadastro realizado com sucesso! <a href='tela_login.php'>Entrar</a></div>";
+        $senhaHash = password_hash($senha, PASSWORD_BCRYPT);
+
+        // Verifica se o e-mail já existe
+        $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = ?");
+        $stmt->execute([$email]);
+        if ($stmt->fetch()) {
+            $mensagem = "<div class='alert alert-danger'>E-mail já cadastrado.</div>";
         } else {
-            $mensagem = "<div class='alert alert-danger'>Erro ao cadastrar.</div>";
+            $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)");
+            if ($stmt->execute([$nome, $email, $senhaHash, $tipo])) {
+                $mensagem = "<div class='alert alert-success'>Cadastro realizado com sucesso! <a href='tela_login.php'>Entrar</a></div>";
+            } else {
+                $mensagem = "<div class='alert alert-danger'>Erro ao cadastrar.</div>";
+            }
         }
     }
 }
@@ -130,6 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="mb-3">
                     <label for="senha" class="form-label">Senha</label>
                     <input type="password" class="form-control" id="senha" name="senha" required>
+                    <small class="text-muted">Mínimo 8 caracteres, uma letra maiúscula e um caractere especial.</small>
                 </div>
                 <div class="mb-3">
                     <label for="tipo" class="form-label">Tipo de usuário</label>
@@ -170,5 +182,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
+
+        // Validação de senha no front-end
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const senha = document.getElementById('senha').value;
+            const regexMaiuscula = /[A-Z]/;
+            const regexEspecial = /[\W_]/;
+            if (
+                senha.length < 8 ||
+                !regexMaiuscula.test(senha) ||
+                !regexEspecial.test(senha)
+            ) {
+                alert('A senha deve ter pelo menos 8 caracteres, uma letra maiúscula e um caractere especial.');
+                e.preventDefault();
+            }
+        });
     </script>
-</body>

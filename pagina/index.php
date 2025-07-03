@@ -160,6 +160,15 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
                                 </a>
                             </li>
                         <?php endif; ?>
+
+                        <?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../Admin/administrador.php">
+                                    <i class="bi bi-shield-lock"></i> Admin
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
                         <li class="nav-item">
                             <a class="nav-link" href="comentarios.php">
                                 <i class="bi bi-chat-dots"></i> Comentários
@@ -182,6 +191,13 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
                             </a>
                         </li>
                     <?php endif; ?>
+                    <!-- Ícone Sobre (visível para todos) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="//redirecionar aq" data-bs-toggle="modal"
+                            data-bs-target="#modalSobre">
+                            <i class="bi bi-info-circle"></i> Sobre
+                        </a>
+                    </li>
                     <!-- Botão modo escuro como link do menu -->
                     <li class="nav-item">
                         <a class="nav-link" href="#" id="toggleDark">
@@ -285,6 +301,7 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
             </div>
         </div>
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.getElementById('formClima').addEventListener('submit', function (e) {

@@ -1,4 +1,5 @@
 <?php
+// filepath: c:\xampp\htdocs\ProjetoFakeNews\Usuarios\tela_login.php
 require_once '../includes/conexao.php';
 session_start();
 
@@ -8,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
+    // Busca usuário no banco
     $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = ?");
     $stmt->execute([$email]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -16,7 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['usuario_id'] = $usuario['id'];
         $_SESSION['usuario_nome'] = $usuario['nome'];
         $_SESSION['usuario_tipo'] = $usuario['tipo'];
-        header("Location: ../pagina/index.php");
+
+        // Se for admin, redireciona para o painel de administrador
+        if ($usuario['tipo'] === 'admin') {
+            header("Location: ../Admin/administrador.php");
+        } else {
+            header("Location: ../pagina/index.php");
+        }
         exit;
     } else {
         $mensagem = "<div class='alert alert-danger'>E-mail ou senha inválidos.</div>";
@@ -157,3 +165,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
     </script>
 </body>
+</html>

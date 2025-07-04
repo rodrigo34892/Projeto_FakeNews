@@ -1,37 +1,34 @@
 <?php
 require_once '../includes/conexao.php';
-session_start();
-
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: tela_login.php");
-    exit;
-}
-
+require_once '../includes/funcoes.php';
 $mensagem = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $senha_atual = $_POST['senha_atual'];
+    $email = $_POST['email'];
+    $codigo = $_POST['codigo'];
     $nova_senha = $_POST['nova_senha'];
-    $confirma_senha = $_POST['confirma_senha'];
-    $id = $_SESSION['usuario_id'];
+    $confirmar_senha = $_POST['confirmar_senha'];
 
-    $stmt = $pdo->prepare("SELECT senha FROM usuarios WHERE id = ?");
-    $stmt->execute([$id]);
-    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($usuario && password_verify($senha_atual, $usuario['senha'])) {
-        if ($nova_senha === $confirma_senha) {
-            $nova_senha_hash = password_hash($nova_senha, PASSWORD_BCRYPT);
-            $stmt = $pdo->prepare("UPDATE usuarios SET senha = ? WHERE id = ?");
-            if ($stmt->execute([$nova_senha_hash, $id])) {
-                $mensagem = "<div class='alert alert-success'>Senha alterada com sucesso!</div>";
+    if ($nova_senha !== $confirmar_senha) {
+        $mensagem = '<div class="alert alert-danger">As senhas não coincidem.</div>';
+    } else {
+        // Verifica se o código está correto
+        $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = ? AND codigo_verificacao = ?");
+        $stmt->execute([$email, $codigo]);
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($usuario) {
+            // Atualiza a senha e limpa o código de verificação
+            $senha_hash = password_hash($nova_senha, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare("UPDATE usuarios SET senha = ?, codigo_verificacao = NULL WHERE id = ?");
+            if ($stmt->execute([$senha_hash, $usuario['id']])) {
+                $mensagem = '<div class="alert alert-success">Senha alterada com sucesso! <a href="tela_login.php" class="text-primary">Entrar</a></div>';
             } else {
-                $mensagem = "<div class='alert alert-danger'>Erro ao alterar senha.</div>";
+                $mensagem = '<div class="alert alert-danger">Erro ao atualizar senha. Tente novamente.</div>';
             }
         } else {
-            $mensagem = "<div class='alert alert-warning'>As senhas não coincidem.</div>";
+            $mensagem = '<div class="alert alert-danger">Código de verificação ou e-mail inválido.</div>';
         }
-    } else {
-        $mensagem = "<div class='alert alert-danger'>Senha atual incorreta.</div>";
     }
 }
 ?>
@@ -40,10 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <meta charset="UTF-8">
-    <title>Alterar Senha - Fato ou Fruta</title>
+    <title>Nova Senha - Fato ou Fruta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Ícones Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Estilo personalizado -->
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         body {
@@ -112,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
@@ -121,30 +122,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </a>
         </div>
     </nav>
+
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="card p-4" style="max-width: 400px; width: 100%;">
-            <h3 class="text-center text-primary mb-3">Alterar Senha</h3>
-            <?= $mensagem ?>
+            <h3 class="text-center text-primary mb-3">Definir Nova Senha</h3>
             <form method="POST">
                 <div class="mb-3">
-                    <label for="senha_atual" class="form-label">Senha atual</label>
-                    <input type="password" class="form-control" id="senha_atual" name="senha_atual" required>
+                    <label for="email" class="form-label">E-mail cadastrado:</label>
+                    <input type="email" class="form-control" name="email" required>
                 </div>
                 <div class="mb-3">
-                    <label for="nova_senha" class="form-label">Nova senha</label>
-                    <input type="password" class="form-control" id="nova_senha" name="nova_senha" required>
+                    <label for="codigo" class="form-label">Código de verificação:</label>
+                    <input type="text" class="form-control" name="codigo" required>
                 </div>
                 <div class="mb-3">
-                    <label for="confirma_senha" class="form-label">Confirme a nova senha</label>
-                    <input type="password" class="form-control" id="confirma_senha" name="confirma_senha" required>
+                    <label for="nova_senha" class="form-label">Nova senha:</label>
+                    <input type="password" class="form-control" name="nova_senha" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirmar_senha" class="form-label">Confirmar nova senha:</label>
+                    <input type="password" class="form-control" name="confirmar_senha" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Alterar Senha</button>
             </form>
+            <div class="mt-3"><?= $mensagem ?></div>
             <div class="text-center mt-3">
-                <a href="../pagina/index.php" class="text-primary">Voltar ao painel</a>
+                Lembrou a senha? <a href="tela_login.php" class="text-primary">Entrar</a>
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
     <footer class="footer mt-5">
         <div class="container text-center">
             <div class="mb-3 social-icons">

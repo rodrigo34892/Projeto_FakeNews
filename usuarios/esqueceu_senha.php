@@ -1,4 +1,5 @@
 <?php
+// filepath: c:\xampp\htdocs\ProjetoFakeNews\usuarios\esqueceu_senha.php
 require_once '../includes/conexao.php';
 require_once '../includes/funcoes.php';
 $mensagem = '';
@@ -8,7 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $codigo = gerarCodigoVerificacao($pdo, $email);
     if ($codigo) {
-        $mensagem = "Seu código de verificação é: <b>$codigo</b>. Anote o código e <a href='nova_senha.php'>clique aqui</a> para redefinir sua senha.";
+        // Passa o e-mail e o código via GET para alterar_senha.php
+        $mensagem = "Seu código de verificação é: <b>$codigo</b>. Anote o código e <a href='nova_senha.php?email=" . urlencode($email) . "&codigo=" . urlencode($codigo) . "'>clique aqui</a> para redefinir sua senha.";
     } else {
         $mensagem = 'E-mail não encontrado.';
     }
@@ -150,5 +152,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
     </script>
 </body>
-
 </html>

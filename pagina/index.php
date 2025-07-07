@@ -13,6 +13,9 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
         exit;
     }
 }
+
+// lista de anúncios ativos e aprovados
+$stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY destaque DESC, data_cadastro DESC");
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -78,6 +81,69 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
             color: #888;
         }
 
+        /* Estilos para os anúncios */
+        .card-anuncio {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-anuncio:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-anuncio .card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-anuncio .card-text {
+            flex-grow: 1;
+        }
+
+        .anuncio-img {
+            height: 180px;
+            object-fit: contain;
+            background: #f8f9fa;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .destaque {
+            border: 2px solid #0d6efd !important;
+            /* Azul no lugar do amarelo */
+        }
+
+        .badge-destaque {
+            background-color: #0d6efd !important;
+            /* Azul no lugar do amarelo */
+            color: white !important;
+        }
+
+        /* Estilos para o widget de clima */
+        .weather-card {
+            max-width: 350px;
+            margin: 0 auto;
+        }
+
+        .weather-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .weather-details {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .weather-detail {
+            flex: 1;
+        }
+
         /* Estilos para dark mode */
         .dark-mode {
             background: #181a1b !important;
@@ -106,6 +172,10 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
         .dark-mode .navbar-brand span,
         .dark-mode .navbar-nav .nav-link {
             color: #f1f1f1 !important;
+        }
+
+        .dark-mode .anuncio-img {
+            background: #2c3034;
         }
     </style>
 </head>
@@ -274,6 +344,38 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
         ?>
     </div>
 
+    <!-- Seção de Anúncios -->
+    <div class="container my-5">
+        <h2 class="text-primary mb-4"><i class="bi bi-megaphone"></i> Anúncios</h2>
+        <div class="row">
+            <?php if ($stmtAnuncios->rowCount() > 0): ?>
+                <?php while ($anuncio = $stmtAnuncios->fetch(PDO::FETCH_ASSOC)): ?>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 card-anuncio <?= $anuncio['destaque'] ? 'border-primary border-2' : '' ?>">
+                            <a href="<?= htmlspecialchars($anuncio['link']) ?>" target="_blank" class="text-decoration-none">
+                                <img src="../assets/imagens/anuncios/<?= htmlspecialchars($anuncio['imagem']) ?>"
+                                    class="anuncio-img card-img-top" alt="<?= htmlspecialchars($anuncio['nome']) ?>">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?= htmlspecialchars($anuncio['nome']) ?></h5>
+                                    <?php if ($anuncio['destaque']): ?>
+                                        <span class="badge bg-primary text-white mb-2">
+                                            <i class="bi bi-star-fill"></i> Destaque
+                                        </span>
+                                    <?php endif; ?>
+                                    <!-- Removida a linha do valor -->
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <div class="col-12">
+                    <div class="alert alert-info">Nenhum anúncio ativo no momento.</div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
     <!-- Widget de clima -->
     <div class="container my-4">
         <h4 class="mb-3"><i class="bi bi-cloud-sun"></i> Verificar Clima</h4>
@@ -304,30 +406,121 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Widget de Clima
         document.getElementById('formClima').addEventListener('submit', function (e) {
             e.preventDefault();
             const cidade = document.getElementById('cidade').value.trim();
             const resultado = document.getElementById('resultadoClima');
-            resultado.innerHTML = "Buscando...";
+
+            // Mostra um card de loading
+            resultado.innerHTML = `
+                <div class="card p-3 weather-card">
+                    <div class="d-flex justify-content-center align-items-center" style="min-height:150px;">
+                        <div class="spinner-border text-primary"></div>
+                        <span class="ms-2">Buscando clima...</span>
+                    </div>
+                </div>
+            `;
+
             fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cidade)}&appid=ebba3fce4cdd0e053bd525570da4bd74&units=metric&lang=pt_br`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.cod === 200) {
+                        const iconeClima = getWeatherIcon(data.weather[0].id);
+
                         resultado.innerHTML = `
-        <div class="card p-3 mx-auto" style="max-width:350px;">
-            <h5>${data.name}, ${data.sys.country}</h5>
-            <p class="mb-1"><strong>Temperatura:</strong> ${data.main.temp}°C</p>
-            <p class="mb-1"><strong>Situação:</strong> ${data.weather[0].description}</p>
-        </div>
+                            <div class="card p-3 weather-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">${data.name}, ${data.sys.country}</h5>
+                                    <span class="badge bg-primary rounded-pill">${new Date().toLocaleDateString('pt-BR')}</span>
+                                </div>
+                                <hr>
+                                <div class="text-center my-3">
+                                    <div class="weather-icon">${iconeClima}</div>
+                                    <h2 class="my-2">${Math.round(data.main.temp)}°C</h2>
+                                    <div class="text-capitalize">${data.weather[0].description}</div>
+                                </div>
+                                <div class="weather-details">
+                                    <div class="weather-detail">
+                                        <div><i class="bi bi-droplet"></i></div>
+                                        <div>${data.main.humidity}%</div>
+                                        <small>Humidade</small>
+                                    </div>
+                                    <div class="weather-detail">
+                                        <div><i class="bi bi-wind"></i></div>
+                                        <div>${(data.wind.speed * 3.6).toFixed(1)} km/h</div>
+                                        <small>Vento</small>
+                                    </div>
+                                    <div class="weather-detail">
+                                        <div><i class="bi bi-thermometer"></i></div>
+                                        <div>${Math.round(data.main.feels_like)}°C</div>
+                                        <small>Sensação</small>
+                                    </div>
+                                </div>
+                            </div>
                         `;
                     } else {
-                        resultado.innerHTML = "<div class='alert alert-danger'>Cidade não encontrada.</div>";
+                        resultado.innerHTML = `
+                            <div class="alert alert-danger">
+                                <i class="bi bi-exclamation-triangle"></i> Cidade não encontrada. Tente novamente.
+                            </div>
+                        `;
                     }
                 })
                 .catch(() => {
-                    resultado.innerHTML = "<div class='alert alert-danger'>Erro ao buscar clima.</div>";
+                    resultado.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle"></i> Erro ao buscar clima. Verifique sua conexão.
+                        </div>
+                    `;
                 });
         });
+
+        // Função para determinar o ícone com base no ID do clima
+        function getWeatherIcon(weatherId) {
+            // Grupo 2xx: Tempestades
+            if (weatherId >= 200 && weatherId < 300) {
+                return '<i class="bi bi-lightning-fill" style="color: #ffc107;"></i>';
+            }
+            // Grupo 3xx: Chuvisco
+            else if (weatherId >= 300 && weatherId < 400) {
+                return '<i class="bi bi-cloud-drizzle-fill" style="color: #6c757d;"></i>';
+            }
+            // Grupo 5xx: Chuva
+            else if (weatherId >= 500 && weatherId < 600) {
+                if (weatherId < 502) {
+                    return '<i class="bi bi-cloud-rain-fill" style="color: #0d6efd;"></i>';
+                } else {
+                    return '<i class="bi bi-cloud-rain-heavy-fill" style="color: #0d6efd;"></i>';
+                }
+            }
+            // Grupo 6xx: Neve
+            else if (weatherId >= 600 && weatherId < 700) {
+                return '<i class="bi bi-snow2" style="color: #dee2e6;"></i>';
+            }
+            // Grupo 7xx: Atmosférico (névoa, etc)
+            else if (weatherId >= 700 && weatherId < 800) {
+                return '<i class="bi bi-cloud-fog-fill" style="color: #adb5bd;"></i>';
+            }
+            // Céu limpo
+            else if (weatherId === 800) {
+                return '<i class="bi bi-sun-fill" style="color: #ffc107;"></i>';
+            }
+            // Nuvens
+            else if (weatherId > 800) {
+                if (weatherId === 801) {
+                    return '<i class="bi bi-cloud-sun-fill" style="color: #adb5bd;"></i>';
+                } else if (weatherId === 802) {
+                    return '<i class="bi bi-cloud-fill" style="color: #6c757d;"></i>';
+                } else {
+                    return '<i class="bi bi-clouds-fill" style="color: #6c757d;"></i>';
+                }
+            }
+            // Padrão
+            else {
+                return '<i class="bi bi-cloud-fill" style="color: #6c757d;"></i>';
+            }
+        }
 
         // Dark mode automático e manual
         function aplicarTemaInicial() {
@@ -340,6 +533,7 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
                 atualizarBotao(true);
             }
         }
+
         function atualizarBotao(escuro) {
             const btn = document.getElementById('toggleDark');
             if (btn) {
@@ -350,8 +544,10 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
                 }
             }
         }
+
         document.addEventListener('DOMContentLoaded', function () {
             aplicarTemaInicial();
+
             const btn = document.getElementById('toggleDark');
             if (btn) {
                 btn.addEventListener('click', function (e) {
@@ -362,6 +558,7 @@ if (isset($_POST['comentar'], $_POST['comentario'], $_POST['noticia_id']) && iss
                     atualizarBotao(escuro);
                 });
             }
+
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
                 if (!localStorage.getItem('tema')) {
                     document.body.classList.toggle('dark-mode', e.matches);

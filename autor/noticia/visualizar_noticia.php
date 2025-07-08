@@ -8,18 +8,21 @@ if (!isset($_SESSION['usuario_id'])) {
     exit;
 }
 
-// busca todas as notícias cadastradas
-$stmt = $pdo->query("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS autor_nome
-                     FROM noticias n
-                     JOIN usuarios u ON n.autor = u.id
-                     ORDER BY n.id DESC");
+// busca apenas as notícias do usuário logado
+$stmt = $pdo->prepare("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS autor_nome
+                      FROM noticias n
+                      JOIN usuarios u ON n.autor = u.id
+                      WHERE n.autor = :autor_id
+                      ORDER BY n.id DESC");
+$stmt->bindParam(':autor_id', $_SESSION['usuario_id']);
+$stmt->execute();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
-    <title>Visualizar Notícias - Fato ou Fruta</title>
+    <title>Minhas Notícias - Fato ou Fruta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -93,7 +96,7 @@ $stmt = $pdo->query("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS auto
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
+            <a class="navbar-brand d-flex align-items-center" href=dashbord.php>
                 <img src="../../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle"
                     style="height: 40px; margin-right: 10px;">
                 <span class="fw-bold">Fato ou Fruta</span>
@@ -101,7 +104,7 @@ $stmt = $pdo->query("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS auto
         </div>
     </nav>
     <div class="container mt-5">
-        <h1 class="mb-4 text-primary">Todas as Notícias</h1>
+        <h1 class="mb-4 text-primary">Minhas Notícias</h1>
         <?php if ($stmt->rowCount() > 0): ?>
             <?php while ($noticia = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
                 <div class="card mb-4">
@@ -118,7 +121,9 @@ $stmt = $pdo->query("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS auto
                 </div>
             <?php endwhile; ?>
         <?php else: ?>
-            <p>Nenhuma notícia cadastrada ainda.</p>
+            <div class="alert alert-info" role="alert">
+                Você ainda não publicou nenhuma notícia.
+            </div>
         <?php endif; ?>
     </div>
     <footer class="footer mt-5">
@@ -148,5 +153,4 @@ $stmt = $pdo->query("SELECT n.id, n.titulo, n.conteudo, n.imagem, u.nome AS auto
         document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
     </script>
 </body>
-
 </html>

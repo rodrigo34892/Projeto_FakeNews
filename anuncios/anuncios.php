@@ -1,3 +1,4 @@
+
 <?php
 require_once '../includes/conexao.php';
 session_start();
@@ -129,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="../pagina/index.php">
+            <a class="navbar-brand d-flex align-items-center" href="../admin/administrador.php">
                 <img src="../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>

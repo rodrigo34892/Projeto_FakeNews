@@ -25,25 +25,40 @@ if (isset($_GET['id'])) {
             
             // Deleta do banco de dados
             $stmtDelete = $pdo->prepare("DELETE FROM anuncio WHERE id = ?");
-            $stmtDelete->execute([$id]);
+            $deleted = $stmtDelete->execute([$id]);
             
-            // Deleta a imagem se existir
-            if (!empty($anuncio['imagem'])) {
-                $caminhoImagem = '../assets/imagens/anuncios/' . $anuncio['imagem'];
-                if (file_exists($caminhoImagem)) {
-                    unlink($caminhoImagem);
+            if ($stmtDelete->rowCount() > 0) {
+                // Deleta a imagem se existir
+                if (!empty($anuncio['imagem'])) {
+                    $caminhoImagem = '../assets/imagens/anuncios/' . $anuncio['imagem'];
+                    if (file_exists($caminhoImagem) && is_writable($caminhoImagem)) {
+                        if (!unlink($caminhoImagem)) {
+                            throw new Exception("Não foi possível deletar a imagem do anúncio");
+                        }
+                    }
                 }
+                
+                $pdo->commit();
+                $_SESSION['mensagem'] = "<div class='alert alert-success'>Anúncio deletado com sucesso!</div>";
+                header("Location: deletar_anuncios.php");
+                exit;
+            } else {
+                throw new Exception("Nenhum registro foi deletado - pode não existir ou você não tem permissão");
             }
             
-            $pdo->commit();
-            $mensagem = "<div class='alert alert-success'>Anúncio deletado com sucesso!</div>";
         } catch (Exception $e) {
             $pdo->rollBack();
-            $mensagem = "<div class='alert alert-danger'>Erro ao deletar anúncio: " . $e->getMessage() . "</div>";
+            $mensagem = "<div class='alert alert-danger'>Erro ao deletar anúncio: " . htmlspecialchars($e->getMessage()) . "</div>";
         }
     } else {
         $mensagem = "<div class='alert alert-danger'>Anúncio não encontrado.</div>";
     }
+}
+
+// Mostra mensagem de sessão se existir
+if (isset($_SESSION['mensagem'])) {
+    $mensagem = $_SESSION['mensagem'];
+    unset($_SESSION['mensagem']);
 }
 
 // Lista todos os anúncios para seleção
@@ -59,8 +74,7 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        html,
-        body {
+        html, body {
             height: 100%;
         }
 
@@ -114,19 +128,19 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
         }
 
         .btn-delete {
-            background-color: #0d6efd;
+            background-color: #dc3545;
             color: white;
             transition: all 0.3s;
         }
 
         .btn-delete:hover {
-            background-color: #0b5ed7;
+            background-color: #bb2d3b;
             color: white;
             transform: scale(1.05);
         }
 
         .tr-destaque {
-            background-color: #ffffff;
+            background-color: #f8f9fa;
         }
 
         /* Dark mode */
@@ -159,7 +173,7 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
         }
 
         .dark-mode .btn-delete {
-            background-color: #1a73e8 !important;
+            background-color: #bb2d3b !important;
         }
 
         .dark-mode .tr-destaque {
@@ -170,7 +184,7 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="../pagina/index.php">
+            <a class="navbar-brand d-flex align-items-center" href="../admin/administrador.php">
                 <img src="../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle">
                 <span class="fw-bold">Fato ou Fruta</span>
             </a>
@@ -185,7 +199,7 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
                     <?= $mensagem ?>
                     
                     <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle"></i> Atenção: Esta ação é irreversível e removerá permanentemente o anúncio.
+                        <i class="bi bi-exclamation-triangle"></i> Atenção: Esta ação é irreversível e removerá permanentemente o anúncio e sua imagem associada.
                     </div>
                 </div>
 
@@ -194,13 +208,13 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
                     
                     <?php if ($stmtAnuncios->rowCount() > 0): ?>
                         <div class="table-responsive">
-                            <table class="table">
-                                <thead>
+                            <table class="table table-hover">
+                                <thead class="table-light">
                                     <tr>
                                         <th>Imagem</th>
                                         <th>Nome</th>
                                         <th>Valor</th>
-                                        <th>Destaque</th>
+                                        <th>Status</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
@@ -208,22 +222,29 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
                                     <?php while ($anuncio = $stmtAnuncios->fetch(PDO::FETCH_ASSOC)): ?>
                                         <tr class="<?= $anuncio['destaque'] ? 'tr-destaque' : '' ?>">
                                             <td>
-                                                <img src="../assets/imagens/anuncios/<?= htmlspecialchars($anuncio['imagem']) ?>" 
-                                                     alt="Anúncio" class="anuncio-img rounded" style="max-width: 100px;">
+                                                <?php if (!empty($anuncio['imagem'])): ?>
+                                                    <img src="../assets/imagens/anuncios/<?= htmlspecialchars($anuncio['imagem']) ?>" 
+                                                         alt="Anúncio" class="anuncio-img rounded" style="max-width: 100px;">
+                                                <?php else: ?>
+                                                    <span class="text-muted">Sem imagem</span>
+                                                <?php endif; ?>
                                             </td>
                                             <td><?= htmlspecialchars($anuncio['nome']) ?></td>
                                             <td>R$ <?= number_format($anuncio['valorAnuncio'], 2, ',', '.') ?></td>
                                             <td>
-                                                <?php if ($anuncio['destaque']): ?>
-                                                    <span class="badge bg-primary"><i class="bi bi-star-fill"></i> Sim</span>
+                                                <?php if ($anuncio['ativo']): ?>
+                                                    <span class="badge bg-success"><i class="bi bi-check-circle"></i> Ativo</span>
                                                 <?php else: ?>
-                                                    <span class="badge bg-secondary"><i class="bi bi-star"></i> Não</span>
+                                                    <span class="badge bg-secondary"><i class="bi bi-x-circle"></i> Inativo</span>
+                                                <?php endif; ?>
+                                                <?php if ($anuncio['destaque']): ?>
+                                                    <span class="badge bg-primary mt-1"><i class="bi bi-star-fill"></i> Destaque</span>
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <a href="deletar_anuncio.php?id=<?= $anuncio['id'] ?>" 
+                                                <a href="deletar_anuncios.php?id=<?= $anuncio['id'] ?>" 
                                                    class="btn btn-delete btn-sm"
-                                                   onclick="return confirm('Tem certeza que deseja deletar este anúncio?')">
+                                                   onclick="return confirm('Tem certeza que deseja deletar o anúncio \'<?= addslashes(htmlspecialchars($anuncio['nome'])) ?>\'? Esta ação não pode ser desfeita!')">
                                                     <i class="bi bi-trash"></i> Deletar
                                                 </a>
                                             </td>

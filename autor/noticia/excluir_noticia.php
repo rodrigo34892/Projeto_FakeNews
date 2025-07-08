@@ -120,7 +120,7 @@ $stmt->execute([$_SESSION['usuario_id']]);
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
+            <a class="navbar-brand d-flex align-items-center" href="../../pagina/index.php">
                 <img src="../../img/logo/logo_fatooufruto.png" alt="Logo" class="rounded-circle"
                     style="height: 40px; margin-right: 10px;">
                 <span class="fw-bold">Fato ou Fruta</span>

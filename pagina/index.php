@@ -594,5 +594,4 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
         });
     </script>
 </body>
-
 </html>

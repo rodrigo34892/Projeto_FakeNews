@@ -177,6 +177,11 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
         .dark-mode .anuncio-img {
             background: #2c3034;
         }
+
+        /* CORRIGE O NOME DO AUTOR NO DARK MODE */
+        .dark-mode .text-muted {
+            color: #b0b8c1 !important;
+        }
     </style>
 </head>
 
@@ -263,8 +268,7 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
                     <?php endif; ?>
                     <!-- Ícone Sobre (visível para todos) -->
                     <li class="nav-item">
-                        <a class="nav-link" href="//redirecionar aq" data-bs-toggle="modal"
-                            data-bs-target="#modalSobre">
+                        <a class="nav-link" href="../sobre/sobre.php">
                             <i class="bi bi-info-circle"></i> Sobre
                         </a>
                     </li>

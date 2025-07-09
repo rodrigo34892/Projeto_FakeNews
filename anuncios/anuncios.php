@@ -1,11 +1,10 @@
-
 <?php
 require_once '../includes/conexao.php';
 session_start();
 
 $mensagem = '';
 
-// Processamento do formulário de anúncio
+// Processamento do formulário de anúncio (método post)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = trim($_POST['nome']);
     $link = trim($_POST['link']);
@@ -13,7 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $destaque = isset($_POST['destaque']) ? 1 : 0;
     $imagem = '';
 
-    // upload de imagem
+
+    // Upload de imagem
+    //Verifica se o aqruivo foi enviado
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
         $ext = strtolower(pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION));
         $permitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
@@ -127,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container">
@@ -186,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Dark mode automático e manual igual ao index.php
+        // Dark mode automático 
         function aplicarTemaInicial() {
             const temaSalvo = localStorage.getItem('tema');
             if (temaSalvo) {
@@ -198,4 +200,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
     </script>
 </body>
+
 </html>

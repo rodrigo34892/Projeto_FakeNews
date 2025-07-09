@@ -135,7 +135,7 @@ $stmtListaAnuncios = $pdo->query("SELECT nome, valorAnuncio, ativo, destaque, da
             </a>
         </div>
 
-          <div class="mb-4">
+        <div class="mb-4">
             <a href="../anuncios/deletar_anuncios.php" class="btn btn-primary btn-anuncio-admin">
                 <i class="bi bi-dash-circle"></i> Deletar Anúncio
             </a>

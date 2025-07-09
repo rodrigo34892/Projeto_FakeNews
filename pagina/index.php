@@ -114,12 +114,10 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
 
         .destaque {
             border: 2px solid #0d6efd !important;
-            /* Azul no lugar do amarelo */
         }
 
         .badge-destaque {
             background-color: #0d6efd !important;
-            /* Azul no lugar do amarelo */
             color: white !important;
         }
 
@@ -168,6 +166,21 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
             border-color: #444 !important;
         }
 
+        /* Correção para campos de texto no dark mode */
+        .dark-mode input[type="text"],
+        .dark-mode input[type="email"],
+        .dark-mode input[type="password"],
+        .dark-mode textarea {
+            color: #f1f1f1 !important;
+            background-color: #23272b !important;
+            border-color: #444 !important;
+        }
+
+        .dark-mode ::placeholder {
+            color: #b0b8c1 !important;
+            opacity: 1 !important;
+        }
+
         .dark-mode .navbar-brand,
         .dark-mode .navbar-brand span,
         .dark-mode .navbar-nav .nav-link {
@@ -178,7 +191,15 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
             background: #2c3034;
         }
 
-        /* CORRIGE O NOME DO AUTOR NO DARK MODE */
+        .autor-nome {
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .dark-mode .autor-nome {
+            color: #66b3ff !important;
+        }
+
         .dark-mode .text-muted {
             color: #b0b8c1 !important;
         }
@@ -266,13 +287,13 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
                             </a>
                         </li>
                     <?php endif; ?>
-                    <!-- Ícone Sobre (visível para todos) -->
+                    <!-- Ícone Sobre  -->
                     <li class="nav-item">
                         <a class="nav-link" href="../sobre/sobre.php">
                             <i class="bi bi-info-circle"></i> Sobre
                         </a>
                     </li>
-                    <!-- Botão modo escuro como link do menu -->
+                    <!-- Botão modo escuro -->
                     <li class="nav-item">
                         <a class="nav-link" href="#" id="toggleDark">
                             <i class="bi bi-moon"></i> Modo Escuro
@@ -302,7 +323,7 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($noticia['titulo']) ?></h5>
                         <p class="card-text"><?= nl2br(htmlspecialchars($noticia['conteudo'])) ?></p>
-                        <p class="card-text"><small class="text-muted">Por
+                        <p class="card-text"><small class="autor-nome">Por
                                 <?= htmlspecialchars($noticia['autor_nome']) ?></small></p>
                         <!-- Comentários -->
                         <hr>
@@ -366,7 +387,6 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
                                             <i class="bi bi-star-fill"></i> Destaque
                                         </span>
                                     <?php endif; ?>
-                                    <!-- Removida a linha do valor -->
                                 </div>
                             </a>
                         </div>
@@ -427,8 +447,8 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
             `;
 
             fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cidade)}&appid=ebba3fce4cdd0e053bd525570da4bd74&units=metric&lang=pt_br`)
-                .then(res => res.json())
-                .then(data => {
+                .then(res => res.json())    //Recebe a resposta da requisição e a converte para JSON
+                .then(data => {     //Recebe os dados JSON processados
                     if (data.cod === 200) {
                         const iconeClima = getWeatherIcon(data.weather[0].id);
 
@@ -578,7 +598,7 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
             <div class="mb-2 mb-md-0">
                 <i class="bi bi-shield-check" style="font-size:1.5rem; color:#0d6efd; margin-right:8px;"></i>
                 Este site utiliza cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa
-                <a href="#" style="color:#0d6efd; text-decoration:underline;">Política de Privacidade</a>.
+                <a href="politica.php" style="color:#0d6efd; text-decoration:underline;">Política de Privacidade</a>.
             </div>
             <button id="btnAceitarCookies" class="btn btn-primary btn-sm ms-md-3">
                 <i class="bi bi-check-circle"></i> Aceitar
@@ -598,4 +618,5 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio WHERE ativo = 1 ORDER BY dest
         });
     </script>
 </body>
+
 </html>

@@ -2,7 +2,7 @@
 require_once '../includes/conexao.php';
 session_start();
 
-// Verifica se o usuário é admin
+// Faz a verificação se o usuário é admin
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'admin') {
     header('Location: ../usuarios/tela_login.php');
     exit;
@@ -10,23 +10,23 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'admin') {
 
 $mensagem = '';
 
-// Processamento da exclusão
+// processamento da exclusão
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    
+
     // Primeiro busca o anúncio para pegar o nome da imagem
     $stmt = $pdo->prepare("SELECT imagem FROM anuncio WHERE id = ?");
     $stmt->execute([$id]);
     $anuncio = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if ($anuncio) {
         try {
             $pdo->beginTransaction();
-            
+
             // Deleta do banco de dados
             $stmtDelete = $pdo->prepare("DELETE FROM anuncio WHERE id = ?");
             $deleted = $stmtDelete->execute([$id]);
-            
+
             if ($stmtDelete->rowCount() > 0) {
                 // Deleta a imagem se existir
                 if (!empty($anuncio['imagem'])) {
@@ -37,7 +37,7 @@ if (isset($_GET['id'])) {
                         }
                     }
                 }
-                
+
                 $pdo->commit();
                 $_SESSION['mensagem'] = "<div class='alert alert-success'>Anúncio deletado com sucesso!</div>";
                 header("Location: deletar_anuncios.php");
@@ -45,7 +45,7 @@ if (isset($_GET['id'])) {
             } else {
                 throw new Exception("Nenhum registro foi deletado - pode não existir ou você não tem permissão");
             }
-            
+
         } catch (Exception $e) {
             $pdo->rollBack();
             $mensagem = "<div class='alert alert-danger'>Erro ao deletar anúncio: " . htmlspecialchars($e->getMessage()) . "</div>";
@@ -74,7 +74,8 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        html, body {
+        html,
+        body {
             height: 100%;
         }
 
@@ -181,6 +182,7 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container">
@@ -197,15 +199,16 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
                 <div class="card p-4 mb-4">
                     <h3 class="text-primary mb-3"><i class="bi bi-trash"></i> Deletar Anúncios</h3>
                     <?= $mensagem ?>
-                    
+
                     <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle"></i> Atenção: Esta ação é irreversível e removerá permanentemente o anúncio e sua imagem associada.
+                        <i class="bi bi-exclamation-triangle"></i> Atenção: Esta ação é irreversível e removerá
+                        permanentemente o anúncio e sua imagem associada.
                     </div>
                 </div>
 
                 <div class="card p-4">
                     <h4 class="mb-3"><i class="bi bi-list-check"></i> Selecione um anúncio para deletar</h4>
-                    
+
                     <?php if ($stmtAnuncios->rowCount() > 0): ?>
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -223,8 +226,8 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
                                         <tr class="<?= $anuncio['destaque'] ? 'tr-destaque' : '' ?>">
                                             <td>
                                                 <?php if (!empty($anuncio['imagem'])): ?>
-                                                    <img src="../assets/imagens/anuncios/<?= htmlspecialchars($anuncio['imagem']) ?>" 
-                                                         alt="Anúncio" class="anuncio-img rounded" style="max-width: 100px;">
+                                                    <img src="../assets/imagens/anuncios/<?= htmlspecialchars($anuncio['imagem']) ?>"
+                                                        alt="Anúncio" class="anuncio-img rounded" style="max-width: 100px;">
                                                 <?php else: ?>
                                                     <span class="text-muted">Sem imagem</span>
                                                 <?php endif; ?>
@@ -238,13 +241,14 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
                                                     <span class="badge bg-secondary"><i class="bi bi-x-circle"></i> Inativo</span>
                                                 <?php endif; ?>
                                                 <?php if ($anuncio['destaque']): ?>
-                                                    <span class="badge bg-primary mt-1"><i class="bi bi-star-fill"></i> Destaque</span>
+                                                    <span class="badge bg-primary mt-1"><i class="bi bi-star-fill"></i>
+                                                        Destaque</span>
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <a href="deletar_anuncios.php?id=<?= $anuncio['id'] ?>" 
-                                                   class="btn btn-delete btn-sm"
-                                                   onclick="return confirm('Tem certeza que deseja deletar o anúncio \'<?= addslashes(htmlspecialchars($anuncio['nome'])) ?>\'? Esta ação não pode ser desfeita!')">
+                                                <a href="deletar_anuncios.php?id=<?= $anuncio['id'] ?>"
+                                                    class="btn btn-delete btn-sm"
+                                                    onclick="return confirm('Tem certeza que deseja deletar o anúncio \'<?= addslashes(htmlspecialchars($anuncio['nome'])) ?>\'? Esta ação não pode ser desfeita!')">
                                                     <i class="bi bi-trash"></i> Deletar
                                                 </a>
                                             </td>
@@ -289,4 +293,5 @@ $stmtAnuncios = $pdo->query("SELECT * FROM anuncio ORDER BY data_cadastro DESC")
         document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
     </script>
 </body>
+
 </html>

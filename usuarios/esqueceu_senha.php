@@ -152,4 +152,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
     </script>
 </body>
+
 </html>

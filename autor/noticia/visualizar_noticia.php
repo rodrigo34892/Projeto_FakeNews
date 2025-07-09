@@ -153,4 +153,5 @@ $stmt->execute();
         document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
     </script>
 </body>
+
 </html>

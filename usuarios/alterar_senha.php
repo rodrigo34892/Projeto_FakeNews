@@ -1,4 +1,3 @@
-
 <?php
 require_once '../includes/conexao.php';
 session_start();
@@ -173,4 +172,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         document.addEventListener('DOMContentLoaded', aplicarTemaInicial);
     </script>
 </body>
+
 </html>

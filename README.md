@@ -47,6 +47,13 @@
 
 ```plaintext
 ProjetoFakeNews/
+├── Admin/
+│   ├── administrador.php
+│   └── hash/
+│       └── hash.php
+├── anuncios/
+│    ├── anuncios.php # Criação de anuncios
+│    └── deletar_anuncios.php # Exluir anuncios
 ├── assets/            # Armazena imagens usadas nas notícias
 │   └── imagens/       # Imagens
 ├── autor/             # Gerenciamento de notícias (autores)
@@ -60,12 +67,18 @@ ProjetoFakeNews/
 ├── includes/          # Funções auxiliares e conexão com o banco de dados
 │   ├── conexao.php    # Conexão com o banco de dados
 │   └── funcoes.php    # Funções auxiliares
+├── img/
+│   └── logo
 ├── pagina/            # Páginas principais e comentários
 │   ├── comentarios.php # Gerenciamento de comentários
-│   └── index.php      # Página principal com as notícias
+│   ├── index.php      # Página principal com as notícias
+│   └── politica.php
+├── sobre/
+│   └── sobre.php
 ├── usuarios/          # Funcionalidades relacionadas ao usuário
 │   ├── cadastro.php   # Tela de cadastro
 │   ├── login.php      # Tela de login
+│   ├── nova_senha.php # Criar nova senha
 │   ├── recuperar_senha.php # Recuperação de senha
 │   ├── alterar_senha.php   # Alteração de senha
 │   └── logout.php     # Logout do usuário

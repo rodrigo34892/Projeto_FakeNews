@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `fato_ou_fruta` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-USE `fato_ou_fruta`;
 -- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: fato_ou_fruta
@@ -18,34 +16,31 @@ USE `fato_ou_fruta`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `comentarios`
+-- Table structure for table `noticias`
 --
 
-DROP TABLE IF EXISTS `comentarios`;
+DROP TABLE IF EXISTS `noticias`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `comentarios` (
+CREATE TABLE `noticias` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `noticia_id` int(11) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
-  `comentario` text NOT NULL,
-  `data` datetime DEFAULT current_timestamp(),
+  `titulo` varchar(255) NOT NULL,
+  `conteudo` text DEFAULT NULL,
+  `imagem` varchar(255) DEFAULT NULL,
+  `autor` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `noticia_id` (`noticia_id`),
-  KEY `usuario_id` (`usuario_id`),
-  CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`noticia_id`) REFERENCES `noticias` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+  KEY `autor` (`autor`),
+  CONSTRAINT `noticias_ibfk_1` FOREIGN KEY (`autor`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `comentarios`
+-- Dumping data for table `noticias`
 --
 
-LOCK TABLES `comentarios` WRITE;
-/*!40000 ALTER TABLE `comentarios` DISABLE KEYS */;
-INSERT INTO `comentarios` (`id`, `noticia_id`, `usuario_id`, `comentario`, `data`) VALUES (1,1,1,'eae gente!','2025-06-23 20:07:39'),(5,1,3,'oi','2025-06-24 22:25:29');
-/*!40000 ALTER TABLE `comentarios` ENABLE KEYS */;
+LOCK TABLES `noticias` WRITE;
+/*!40000 ALTER TABLE `noticias` DISABLE KEYS */;
+/*!40000 ALTER TABLE `noticias` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -57,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-25 19:55:28
+-- Dump completed on 2025-07-09 19:34:14

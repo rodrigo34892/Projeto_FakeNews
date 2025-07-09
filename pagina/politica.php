@@ -1,5 +1,4 @@
 <?php
-// Nenhuma lógica PHP necessária para a página "Política de Privacidade"
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -131,8 +130,6 @@
     <div class="container py-5">
         <div class="card p-4 p-md-5">
             <h1 class="text-center text-primary mb-4">Política de Privacidade</h1>
-            <p class="text-muted text-center mb-4">Última atualização: <?php echo date('d/m/Y'); ?></p>
-
             <div class="privacy-section">
                 <p>Bem-vindo à Política de Privacidade do <strong>Fato ou Fruta</strong>. Esta página informa sobre
                     nossas políticas relativas à coleta, uso e divulgação de dados pessoais quando você utiliza nosso
